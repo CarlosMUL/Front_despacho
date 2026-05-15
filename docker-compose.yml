@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      VENTAS_BACKEND_HOST: ${VENTAS_BACKEND_HOST}
+      DESPACHOS_BACKEND_HOST: ${DESPACHOS_BACKEND_HOST}
+    networks:
+      - frontend-network
+
+networks:
+  frontend-network:
+    driver: bridge
