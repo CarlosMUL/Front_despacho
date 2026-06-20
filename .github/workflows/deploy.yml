@@ -24,11 +24,34 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Build y Push a ECR
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          ECR_REGISTRY: 361510669006.dkr.ecr.us-east-1.amazonaws.com
+          ECR_REPO: front-innovatech
         run: |
-          docker build -t front-innovatech .
-          docker tag front-innovatech:latest 361510669006.dkr.ecr.us-east-1.amazonaws.com/front-innovatech:latest
-          docker push 361510669006.dkr.ecr.us-east-1.amazonaws.com/front-innovatech:latest
+          docker build -t $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPO:latest .
+          docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPO:latest
 
-      - name: Deploy a ECS
+      - name: Actualizar Task Definition con nueva imagen
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          ECR_REGISTRY: 361510669006.dkr.ecr.us-east-1.amazonaws.com
+          ECR_REPO: front-innovatech
         run: |
-          aws ecs update-service --cluster Cluster-innovatech --service svc-frontend --force-new-deployment
+          TASK_DEF=$(aws ecs describe-task-definition --task-definition task-front --query taskDefinition)
+          NEW_TASK_DEF=$(echo $TASK_DEF | python3 -c "
+          import json, sys
+          td = json.load(sys.stdin)
+          for c in td['containerDefinitions']:
+              c['image'] = '$ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG'
+          for key in ['taskDefinitionArn','revision','status','requiresAttributes','compatibilities','registeredAt','registeredBy']:
+              td.pop(key, None)
+          print(json.dumps(td))
+          ")
+          NEW_ARN=$(aws ecs register-task-definition --cli-input-json "$NEW_TASK_DEF" --query 'taskDefinition.taskDefinitionArn' --output text)
+          aws ecs update-service --cluster Cluster-innovatech --service svc-frontend --task-definition $NEW_ARN --force-new-deployment
+
+      - name: Esperar deployment estable
+        run: |
+          aws ecs wait services-stable --cluster Cluster-innovatech --services svc-frontend
