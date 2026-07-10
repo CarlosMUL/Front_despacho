@@ -12,6 +12,19 @@ jobs:
       - name: Checkout codigo
         uses: actions/checkout@v4
 
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar lint
+        run: npm run lint
+
       - name: Configurar AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
