@@ -4,9 +4,9 @@
 **Docente:** Carlos Martínez
 
 **Integrantes:**
-- Carlos Muñoz Leyton
-- Bastián Brisso
 - Carlos Camero
+- Bastián Brisso
+- Carlos Muñoz
 
 **Repositorios del proyecto:**
 - Frontend: https://github.com/CarlosMUL/Front_despacho
