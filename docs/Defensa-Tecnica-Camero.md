@@ -1,4 +1,4 @@
-# Reflexión Individual — Evaluación Final Transversal
+# Defensa Técnica Individual — Evaluación Final Transversal
 
 **Estudiante:** Carlos Camero
 **Asignatura:** Introducción a Herramientas DevOps (ISY1101)
