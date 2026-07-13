@@ -9,9 +9,9 @@
 - Carlos Muñoz
 
 **Repositorios del proyecto:**
-- Frontend: https://github.com/CarlosMUL/Front_despacho
-- Backend Ventas: https://github.com/CarlosMUL/Back_ventas
-- Backend Despachos: https://github.com/CarlosMUL/Back_despacho
+- Frontend: https://github.com/CarlosMUL/Front_despacho/tree/deploy
+- Backend Ventas: https://github.com/CarlosMUL/Back_ventas/tree/deploy
+- Backend Despachos: https://github.com/CarlosMUL/Back_despacho/tree/deploy
 
 *Este documento de documentación técnica se encuentra replicado en la carpeta `docs/` de los tres repositorios listados arriba.*
 
